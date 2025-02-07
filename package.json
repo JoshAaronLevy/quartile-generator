@@ -20,7 +20,9 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "test:coverage": "react-scripts test --coverage --watchAll=false",
-    "coveralls": "react-scripts test --coverage --watchAll=false && cat ./coverage/lcov.info | coveralls"
+    "coveralls": "react-scripts test --coverage --watchAll=false && cat ./coverage/lcov.info | coveralls",
+    "test:e2e": "playwright test",
+    "test:e2e:ui": "playwright test --ui"
   },
   "eslintConfig": {
     "extends": [
@@ -41,9 +43,11 @@
     ]
   },
   "devDependencies": {
+    "@playwright/test": "^1.50.1",
     "@testing-library/dom": "^10.4.0",
     "@testing-library/jest-dom": "^6.6.3",
     "@testing-library/react": "^16.2.0",
+    "@types/node": "^22.13.1",
     "coveralls": "^3.1.1"
   }
 }

@@ -10,9 +10,9 @@ describe('QuartileBoard', () => {
 
   it('renders 20 tiles', () => {
     render(<QuartileBoard {...mockProps} />);
-    const tiles = screen.getAllByTestId('tile');
+    const tiles = screen.getAllByTestId(/^tile-\d+$/);
     expect(tiles).toHaveLength(20);
-  });
+  })
 
   it('shows tile content when provided', () => {
     const props = {
