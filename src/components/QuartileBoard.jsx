@@ -1,6 +1,9 @@
 import React from 'react';
 import { Paper, Box, Typography } from '@mui/material';
 
+/**
+ * QuartileBoard component for the Quartile Generator app
+ */
 const QuartileBoard = ({ tiles, selectedTiles, onTileSelect }) => {
   return (
     <Box sx={{ display: 'grid', gap: 2, my: 3 }}>

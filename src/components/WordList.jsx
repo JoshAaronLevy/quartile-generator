@@ -6,7 +6,9 @@ import {
   Box,
   Grid2,
   Chip,
-  CircularProgress
+  CircularProgress,
+  Tabs,
+  Tab
 } from '@mui/material';
 
 const ITEMS_PER_PAGE = 75; // 25 rows * 3 words per row
@@ -17,17 +19,42 @@ const WORDS_PER_ROW = 3;
  */
 const WordList = ({ words, isLoading, totalPossibilities }) => {
   const [page, setPage] = useState(1);
-  const totalPages = Math.ceil(words.length / ITEMS_PER_PAGE);
+  const [activeTab, setActiveTab] = useState('all');
+
+  const getFilteredWords = () => {
+    if (activeTab === 'all') {
+      return [
+        ...(words.twoTiles || []),
+        ...(words.threeTiles || []),
+        ...(words.fourTiles || [])
+      ];
+    }
+    return words[activeTab] || [];
+  };
+
+  const filteredWords = getFilteredWords();
+  const totalPages = Math.ceil(filteredWords.length / ITEMS_PER_PAGE);
 
   const handlePageChange = (event, value) => {
     setPage(value);
     window.scrollTo({ top: document.querySelector('#word-list').offsetTop, behavior: 'smooth' });
   };
 
+  const handleTabChange = (event, newValue) => {
+    setActiveTab(newValue);
+    setPage(1);
+  };
+
   const getPageWords = () => {
     const start = (page - 1) * ITEMS_PER_PAGE;
     const end = start + ITEMS_PER_PAGE;
-    return words.slice(start, end);
+    return filteredWords.slice(start, end);
+  };
+
+  const getTotalWordCount = () => {
+    return (words.twoTiles?.length || 0) +
+      (words.threeTiles?.length || 0) +
+      (words.fourTiles?.length || 0);
   };
 
   const renderWordGrid = () => {
@@ -65,11 +92,37 @@ const WordList = ({ words, isLoading, totalPossibilities }) => {
     return rows;
   };
 
+  const renderTabs = () => (
+    <Tabs
+      value={activeTab}
+      onChange={handleTabChange}
+      sx={{ mb: 2 }}
+      centered
+    >
+      <Tab
+        label={`All Words (${getTotalWordCount()})`}
+        value="all"
+      />
+      <Tab
+        label={`2 Tiles (${words.twoTiles?.length || 0})`}
+        value="twoTiles"
+      />
+      <Tab
+        label={`3 Tiles (${words.threeTiles?.length || 0})`}
+        value="threeTiles"
+      />
+      <Tab
+        label={`4 Tiles (${words.fourTiles?.length || 0})`}
+        value="fourTiles"
+      />
+    </Tabs>
+  );
+
   return (
     <Paper elevation={2} sx={{ mt: 3 }} id="word-list">
       <Box sx={{ p: 2 }}>
         <Typography variant="h6" gutterBottom>
-          Possible Words {words.length > 0 && `(${words.length} total)`}
+          Possible Words {getTotalWordCount() > 0 && `(${getTotalWordCount()} total)`}
         </Typography>
 
         {isLoading ? (
@@ -88,8 +141,9 @@ const WordList = ({ words, isLoading, totalPossibilities }) => {
               Analyzing {totalPossibilities.toLocaleString()} possible combinations...
             </Typography>
           </Box>
-        ) : words.length > 0 ? (
+        ) : getTotalWordCount() > 0 ? (
           <>
+            {renderTabs()}
             <Box sx={{ minHeight: '750px' }}>
               {renderWordGrid()}
             </Box>
