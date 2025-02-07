@@ -21,7 +21,7 @@ const QuartileBoard = ({ tiles, selectedTiles, onTileSelect }) => {
             const tileContent = tiles[index];
             return (
               <Paper
-                data-testid="tile"
+                data-testid={`tile-${index}`}
                 key={col}
                 elevation={2}
                 sx={{
