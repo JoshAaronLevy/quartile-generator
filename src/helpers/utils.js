@@ -20,8 +20,6 @@ function factorial(num) {
  */
 export function calculateTotalPossibilities(numTiles) {
   let total = 0;
-
-  // For each possible size (2, 3, 4), calculate combinations if we have enough tiles
   for (let size = 2; size <= 4; size++) {
     if (numTiles >= size) {
       const combinations = factorial(numTiles) / (factorial(size) * factorial(numTiles - size));
@@ -29,7 +27,6 @@ export function calculateTotalPossibilities(numTiles) {
       total += Math.round(combinations * permutationsPerCombination);
     }
   }
-
   return total;
 }
 
