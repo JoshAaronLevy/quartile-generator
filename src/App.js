@@ -9,7 +9,7 @@ import {
   TextField
 } from '@mui/material';
 import QuartileBoard from './components/QuartileBoard';
-import SelectedTiles from './components/SelectedTiles';
+// import SelectedTiles from './components/SelectedTiles';
 import WordList from './components/WordList';
 import { generateCombinations, calculateTotalPossibilities } from './helpers/utils';
 import './App.sass';
@@ -111,11 +111,11 @@ function App() {
           </Button>
         </Box>
 
-        <SelectedTiles
+        {/* <SelectedTiles
           tiles={tiles}
           selectedIndices={selectedTiles}
           onTileClick={handleTileSelect}
-        />
+        /> */}
 
         <Box sx={{
           display: 'flex',
