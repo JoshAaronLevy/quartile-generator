@@ -13,6 +13,9 @@ import QuartileBoard from './components/QuartileBoard';
 import WordList from './components/WordList';
 import { generateCombinations, calculateTotalPossibilities } from './helpers/utils';
 import './App.sass';
+import SaveBoardDialog from './components/SaveBoardDialog';
+import LoadBoardDialog from './components/LoadBoardDialog';
+import { useBoards } from './context/BoardContext';
 
 const theme = createTheme({
   palette: {
@@ -36,12 +39,16 @@ function App() {
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [totalPossibilities, setTotalPossibilities] = useState(0);
   const [newTileText, setNewTileText] = useState('');
+  const [saveDialogOpen, setSaveDialogOpen] = useState(false);
+  const [loadDialogOpen, setLoadDialogOpen] = useState(false);
+
+  const { savedBoards } = useBoards();
 
   const handleAddTile = () => {
     if (!newTileText.trim()) return;
 
     const emptyIndex = tiles.findIndex(tile => !tile);
-    if (emptyIndex === -1) return; // board is full
+    if (emptyIndex === -1) return;
 
     const newTiles = [...tiles];
     newTiles[emptyIndex] = newTileText.toLowerCase().trim();
@@ -50,7 +57,6 @@ function App() {
   };
 
   const handleTileSelect = (index) => {
-    // Only allow selecting tiles that have content
     if (!tiles[index]) return;
 
     setSelectedTiles(prev =>
@@ -143,6 +149,28 @@ function App() {
           </Button>
         </Box>
 
+        <Box sx={{
+          display: 'flex',
+          justifyContent: 'center',
+          gap: 2,
+          mb: 3
+        }}>
+          <Button
+            variant="outlined"
+            onClick={() => setSaveDialogOpen(true)}
+            disabled={!tiles.some(tile => tile)}
+          >
+            Save Current Board
+          </Button>
+          <Button
+            variant="outlined"
+            onClick={() => setLoadDialogOpen(true)}
+            disabled={savedBoards.length === 0}
+          >
+            View Saved Boards
+          </Button>
+        </Box>
+
         <QuartileBoard
           tiles={tiles}
           selectedTiles={selectedTiles}
@@ -153,6 +181,18 @@ function App() {
           words={possibleWords}
           isLoading={isAnalyzing}
           totalPossibilities={totalPossibilities}
+        />
+
+        <SaveBoardDialog
+          open={saveDialogOpen}
+          onClose={() => setSaveDialogOpen(false)}
+          currentTiles={tiles}
+        />
+
+        <LoadBoardDialog
+          open={loadDialogOpen}
+          onClose={() => setLoadDialogOpen(false)}
+          onLoadBoard={setTiles}
         />
       </Container>
     </ThemeProvider>
