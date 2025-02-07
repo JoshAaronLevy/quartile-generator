@@ -19,15 +19,18 @@ function factorial(num) {
  * @returns {number} Total number of possible combinations
  */
 export function calculateTotalPossibilities(numTiles) {
-  if (numTiles >= 4) {
-    // Calculate combinations of 4 from n tiles, then multiply by permutations of 4
-    const combinations = factorial(numTiles) / (factorial(4) * factorial(numTiles - 4));
-    const permutationsPerCombination = factorial(4);
-    return Math.round(combinations * permutationsPerCombination);
-  } else {
-    // Just calculate permutations of all tiles
-    return factorial(numTiles);
+  let total = 0;
+
+  // For each possible size (2, 3, 4), calculate combinations if we have enough tiles
+  for (let size = 2; size <= 4; size++) {
+    if (numTiles >= size) {
+      const combinations = factorial(numTiles) / (factorial(size) * factorial(numTiles - size));
+      const permutationsPerCombination = factorial(size);
+      total += Math.round(combinations * permutationsPerCombination);
+    }
   }
+
+  return total;
 }
 
 /**
@@ -46,7 +49,7 @@ function checkWord(word) {
  * @returns {Array} Array of all possible k-combinations
  */
 function getCombinations(array, k) {
-  const result = [];
+  // const result = [];
 
   // Base cases
   if (k === 0) return [[]];
@@ -85,28 +88,47 @@ function getPermutations(array) {
 }
 
 /**
- * Generate combinations based on selected tiles and validate words
+ * Generate combinations of specific size and validate words
  * @param {string[]} tiles - Array of tile contents
+ * @param {number} size - Size of combinations to generate
  * @returns {string[]} Array of valid word combinations
  */
-export function generateCombinations(tiles) {
-  let allPermutations;
+function generateCombinationsOfSize(tiles, size) {
+  if (tiles.length < size) return [];
 
-  if (tiles.length >= 4) {
-    // Get all possible combinations of 4 tiles
-    const combinations = getCombinations(tiles, 4);
-    // For each combination, get all possible permutations
-    allPermutations = combinations.flatMap(combo =>
-      getPermutations(combo).map(perm => perm.join(''))
-    );
-  } else {
-    // For less than 4 tiles, get all permutations
-    allPermutations = getPermutations(tiles).map(perm => perm.join(''));
+  const combinations = getCombinations(tiles, size);
+  const permutations = combinations.flatMap(combo =>
+    getPermutations(combo).map(perm => perm.join(''))
+  );
+
+  // Remove duplicates and validate words
+  return [...new Set(permutations)].filter(word => checkWord(word));
+}
+
+/**
+ * Generate all valid word combinations using 2-4 tiles
+ * @param {string[]} tiles - Array of tile contents
+ * @returns {Object} Object containing arrays of valid words grouped by tile count
+ */
+export function generateCombinations(tiles) {
+  const result = {
+    twoTiles: [],
+    threeTiles: [],
+    fourTiles: []
+  };
+
+  // Generate combinations for each size if we have enough tiles
+  if (tiles.length >= 2) {
+    result.twoTiles = generateCombinationsOfSize(tiles, 2);
   }
 
-  // Remove duplicates
-  allPermutations = [...new Set(allPermutations)];
+  if (tiles.length >= 3) {
+    result.threeTiles = generateCombinationsOfSize(tiles, 3);
+  }
 
-  // Validate words and return immediately
-  return allPermutations.filter(word => checkWord(word));
+  if (tiles.length >= 4) {
+    result.fourTiles = generateCombinationsOfSize(tiles, 4);
+  }
+
+  return result;
 }
