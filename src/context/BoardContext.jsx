@@ -1,7 +1,13 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 
-const BoardContext = createContext();
+/**
+ * Context for managing saved boards
+ */
+export const BoardContext = createContext();
 
+/**
+ * Provider component for the BoardContext
+ */
 export function BoardProvider({ children }) {
   const [savedBoards, setSavedBoards] = useState(() => {
     // Initialize from localStorage if available
@@ -43,6 +49,9 @@ export function BoardProvider({ children }) {
   );
 }
 
+/**
+ * Hook to consume the BoardContext
+ */
 export function useBoards() {
   const context = useContext(BoardContext);
   if (!context) {
