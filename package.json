@@ -22,7 +22,9 @@
     "test:coverage": "react-scripts test --coverage --watchAll=false",
     "coveralls": "react-scripts test --coverage --watchAll=false && cat ./coverage/lcov.info | coveralls",
     "test:e2e": "playwright test",
-    "test:e2e:ui": "playwright test --ui"
+    "test:e2e:ui": "playwright test --ui",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build"
   },
   "eslintConfig": {
     "extends": [
@@ -48,6 +50,7 @@
     "@testing-library/jest-dom": "^6.6.3",
     "@testing-library/react": "^16.2.0",
     "@types/node": "^22.13.1",
-    "coveralls": "^3.1.1"
+    "coveralls": "^3.1.1",
+    "gh-pages": "^6.3.0"
   }
 }
