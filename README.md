@@ -2,6 +2,8 @@
 
 # Quartile Generator
 
+View the deployed app [here](https://quartile-generator.vercel.app/).
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
