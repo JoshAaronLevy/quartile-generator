@@ -11,7 +11,7 @@ import {
   Tab
 } from '@mui/material';
 
-const ITEMS_PER_PAGE = 75; // 25 rows * 3 words per row
+const ITEMS_PER_PAGE = 75;
 const WORDS_PER_ROW = 3;
 
 /**
@@ -82,7 +82,6 @@ const WordList = ({ words, isLoading, totalPossibilities }) => {
               />
             </Grid2>
           ))}
-          {/* Fill empty spaces in last row */}
           {[...Array(WORDS_PER_ROW - rowWords.length)].map((_, index) => (
             <Grid2 xs={4} key={`empty-${index}`} />
           ))}
