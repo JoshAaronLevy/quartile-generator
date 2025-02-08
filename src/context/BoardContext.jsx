@@ -10,12 +10,10 @@ export const BoardContext = createContext();
  */
 export function BoardProvider({ children }) {
   const [savedBoards, setSavedBoards] = useState(() => {
-    // Initialize from localStorage if available
     const saved = localStorage.getItem('quartilesBoards');
     return saved ? JSON.parse(saved) : [];
   });
 
-  // Save to localStorage whenever boards change
   useEffect(() => {
     localStorage.setItem('quartilesBoards', JSON.stringify(savedBoards));
   }, [savedBoards]);

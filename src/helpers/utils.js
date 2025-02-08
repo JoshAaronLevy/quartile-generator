@@ -46,21 +46,15 @@ function checkWord(word) {
  * @returns {Array} Array of all possible k-combinations
  */
 function getCombinations(array, k) {
-  // const result = [];
-
-  // Base cases
   if (k === 0) return [[]];
   if (k > array.length) return [];
 
-  // Recursive case
   const first = array[0];
   const rest = array.slice(1);
 
-  // Get combinations that include the first element
   const combsWithFirst = getCombinations(rest, k - 1)
     .map(combo => [first, ...combo]);
 
-  // Get combinations that exclude the first element
   const combsWithoutFirst = getCombinations(rest, k);
 
   return [...combsWithFirst, ...combsWithoutFirst];
@@ -98,7 +92,6 @@ function generateCombinationsOfSize(tiles, size) {
     getPermutations(combo).map(perm => perm.join(''))
   );
 
-  // Remove duplicates and validate words
   return [...new Set(permutations)].filter(word => checkWord(word));
 }
 
@@ -114,7 +107,6 @@ export function generateCombinations(tiles) {
     fourTiles: []
   };
 
-  // Generate combinations for each size if we have enough tiles
   if (tiles.length >= 2) {
     result.twoTiles = generateCombinationsOfSize(tiles, 2);
   }
